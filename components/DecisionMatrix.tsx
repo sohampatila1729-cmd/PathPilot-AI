@@ -16,7 +16,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { Layers, Info, CheckCircle2, ShieldCheck, Scale } from "lucide-react";
+import { Layers, Info, Scale, Sparkles, HelpCircle } from "lucide-react";
 
 interface DecisionMatrixProps {
   pathways: Pathway[];
@@ -25,13 +25,41 @@ interface DecisionMatrixProps {
 export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
   const [mounted, setMounted] = useState(false);
   const [activeChart, setActiveChart] = useState<"radar" | "bar">("radar");
+  const [hoveredFactor, setHoveredFactor] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const factorInfo: Record<string, { label: string; desc: string; influences: string }> = {
+    Academic: {
+      label: "Academic Fit",
+      desc: "Prerequisite alignment with program rigor",
+      influences: "Influenced by Class 10 marks, strong subjects (Math/Science), and curriculum jump difficulty.",
+    },
+    Interest: {
+      label: "Interest Fit",
+      desc: "Passion & aptitude overlap",
+      influences: "Influenced by alignment with coding, AI, robotics, or hardware affinity.",
+    },
+    Budget: {
+      label: "Budget Fit",
+      desc: "Family financial affordability buffer",
+      influences: "Calculated from annual family budget vs total estimated 3-4 year tuition and living expense.",
+    },
+    Admission: {
+      label: "Admission Feasibility",
+      desc: "Realistic entrance odds & seat competition",
+      influences: "Based on historical MHT-CET/JEE cutoffs for open categories vs polytechnic board merit.",
+    },
+    Career: {
+      label: "Career Alignment",
+      desc: "5-year downstream employability match",
+      influences: "Evaluates how directly this pathway leads to the student's declared long-term target career.",
+    },
+  };
+
   // Format data for Radar Chart
-  // Radar metrics: Academic Fit, Interest Fit, Budget Fit, Admission Ease, Career Alignment
   const radarData = [
     {
       metric: "Academic Fit",
@@ -61,7 +89,7 @@ export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
   // Format data for Bar Chart
   const barData = pathways.map((p, idx) => ({
     name: `Pathway ${idx + 1}`,
-    shortTitle: p.title.length > 25 ? p.title.slice(0, 25) + "..." : p.title,
+    shortTitle: p.title.length > 22 ? p.title.slice(0, 22) + "..." : p.title,
     Academic: p.academicFit,
     Interest: p.interestFit,
     Budget: p.budgetFit,
@@ -74,12 +102,12 @@ export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
 
   return (
     <div className="space-y-6">
-      {/* Top Disclaimer & Philosophy Banner */}
+      {/* Top Value Banner */}
       <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-indigo-500/20 bg-indigo-950/20 flex items-start gap-3">
         <Scale className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
         <div className="text-xs text-slate-300">
           <p className="font-semibold text-white mb-1">
-            Transparent Decision Matrix &bull; Multi-Criteria Trade-off Analysis
+            Decision-Support Indicators &bull; Multi-Criteria Trade-off Analysis
           </p>
           <p className="text-slate-400 leading-relaxed">
             PathPilot AI does not deliver a single dogmatic recommendation. These 5 dimensional
@@ -88,6 +116,33 @@ export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
             higher budget safety or zero admission stress.
           </p>
         </div>
+      </div>
+
+      {/* Interactive Factor Exploration Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        {Object.entries(factorInfo).map(([key, info]) => (
+          <div
+            key={key}
+            onMouseEnter={() => setHoveredFactor(key)}
+            onMouseLeave={() => setHoveredFactor(null)}
+            className={`p-3 rounded-xl border transition-all cursor-pointer ${
+              hoveredFactor === key
+                ? "bg-slate-800/90 border-indigo-500/60 shadow-lg shadow-indigo-500/10 -translate-y-0.5"
+                : "glass-panel border-slate-800/80 hover:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-bold text-slate-200">{info.label}</span>
+              <Info className="w-3 h-3 text-slate-400 opacity-70" />
+            </div>
+            <p className="text-[10px] text-slate-400 leading-tight line-clamp-1">{info.desc}</p>
+            {hoveredFactor === key && (
+              <p className="text-[10px] text-indigo-300 mt-2 pt-1 border-t border-slate-700 leading-normal animate-in fade-in duration-150">
+                {info.influences}
+              </p>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Visual Chart Container */}
@@ -103,7 +158,7 @@ export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center gap-1.5 bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-xs">
             <button
               onClick={() => setActiveChart("radar")}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
@@ -185,7 +240,7 @@ export default function DecisionMatrix({ pathways }: DecisionMatrixProps) {
         </div>
       </div>
 
-      {/* Granular Decision Matrix Score Table */}
+      {/* Decision Matrix Table */}
       <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
         <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
           <h4 className="text-sm font-bold text-white">Full Dimensional Breakdown Table</h4>

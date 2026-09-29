@@ -24,9 +24,8 @@ import {
   Building2,
   Award,
   Calculator,
-  UserCheck,
-  AlertTriangle,
   RotateCcw,
+  ArrowRight,
 } from "lucide-react";
 
 export default function Home() {
@@ -64,7 +63,6 @@ export default function Home() {
         setAiExplanation(data);
         setIsAiFallback(data.source !== "gemini-ai");
       } else {
-        // Local fallback
         const fallback = generateDeterministicAIExplanation(
           profile,
           simulatedPathways,
@@ -113,11 +111,11 @@ export default function Home() {
 
       {/* Active What-If Notification Banner if a scenario is engaged */}
       {activeScenario && (
-        <div className="bg-amber-500/15 border-b border-amber-500/30 px-4 py-2 text-center text-xs text-amber-200 flex items-center justify-center gap-3">
-          <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" />
+        <div className="bg-amber-500/15 border-b border-amber-500/30 px-4 py-2 text-center text-xs text-amber-200 flex items-center justify-center gap-3 animate-in fade-in duration-200">
+          <Zap className="w-4 h-4 text-amber-400 animate-pulse" />
           <span>
-            Active Simulation: <strong>{activeScenario.label}</strong> is altering feasibility and
-            budget trade-offs.
+            Active Simulation: <strong>{activeScenario.label}</strong> is altering pathway trade-offs
+            and affordability.
           </span>
           <button
             onClick={() => setActiveScenario(null)}
@@ -140,12 +138,12 @@ export default function Home() {
             />
 
             {/* Quick Pathways Preview */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <Route className="w-5 h-5 text-indigo-400" />
-                    Simulated Career Pathways Preview
+                    <span>Simulated Career Pathways Preview</span>
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Multi-path alternatives tailored to {profile.fullName}&apos;s profile ({profile.class10Percentage}%).
@@ -153,10 +151,14 @@ export default function Home() {
                 </div>
 
                 <button
-                  onClick={() => setActiveTab("pathways")}
-                  className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                  onClick={() => {
+                    setActiveTab("pathways");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 group"
                 >
-                  <span>View All 4 Pathways</span> &rarr;
+                  <span>View All 4 Pathways</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
 
@@ -165,42 +167,55 @@ export default function Home() {
                   <PathwayCard key={p.id} pathway={p} rank={idx + 1} />
                 ))}
               </div>
-            </div>
+            </section>
 
             {/* Quick Decision Matrix Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <Layers className="w-5 h-5 text-cyan-400" />
-                    Decision Matrix Summary
+                    <span>Decision Matrix Summary</span>
                   </h2>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Transparent, deterministic scoring across Academic Fit, Budget, and Admission odds.
                   </p>
                 </div>
                 <button
-                  onClick={() => setActiveTab("matrix")}
-                  className="text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+                  onClick={() => {
+                    setActiveTab("matrix");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 group"
                 >
-                  Open Full Matrix &rarr;
+                  <span>Open Full Matrix</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
               <DecisionMatrix pathways={simulatedPathways} />
-            </div>
+            </section>
 
             {/* Quick AI Insights Teaser */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-emerald-400" />
-                  AI Reasoning & Trade-off Insights
-                </h2>
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-emerald-400" />
+                    <span>AI Reasoning & Trade-off Insights</span>
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Strategic analysis separating observed data, bottlenecks, and uncertainties.
+                  </p>
+                </div>
                 <button
-                  onClick={() => setActiveTab("ai-explain")}
-                  className="text-xs font-semibold text-emerald-400 hover:text-emerald-300"
+                  onClick={() => {
+                    setActiveTab("ai-explain");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 group"
                 >
-                  Full AI Explanation &rarr;
+                  <span>Full AI Explanation</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
               <AIExplanationPanel
@@ -208,7 +223,7 @@ export default function Home() {
                 loading={isAiLoading}
                 onRefresh={fetchAIExplanation}
               />
-            </div>
+            </section>
           </div>
         )}
 
@@ -240,7 +255,7 @@ export default function Home() {
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                   <Route className="w-6 h-6 text-indigo-400" />
-                  Simulated Education & Career Pathways
+                  <span>Simulated Education & Career Pathways</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
                   Showing 4 structured alternatives from Class 10 through degree to initial career
@@ -251,14 +266,14 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setActiveTab("whatif")}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-1.5"
                 >
                   <Zap className="w-3.5 h-3.5" />
                   <span>Test What-If Scenarios</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("matrix")}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-all"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 hover:-translate-y-0.5 active:translate-y-0 transition-all"
                 >
                   View Decision Matrix
                 </button>
@@ -279,7 +294,7 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Layers className="w-6 h-6 text-cyan-400" />
-                Comprehensive 5-Factor Decision Matrix
+                <span>Comprehensive 5-Factor Decision Matrix</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Visualizing multi-dimensional viability without single-college bias.
@@ -295,7 +310,7 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Zap className="w-6 h-6 text-amber-400" />
-                Alternative & What-If Scenario Simulator
+                <span>Alternative & What-If Scenario Simulator</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Simulate sudden financial constraints, lower board percentages, or career pivots to
@@ -318,7 +333,7 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Building2 className="w-6 h-6 text-indigo-400" />
-                Regional & Benchmark Institution Comparison
+                <span>Regional & Benchmark Institution Comparison</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Compare tuition, program duration, cutoffs, and scholarship support side by side.
@@ -334,10 +349,10 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Award className="w-6 h-6 text-emerald-400" />
-                Scholarship & Funding Opportunities
+                <span>Scholarship & Funding Opportunities</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
-                Government fee waivers and corporate CSR grants mapped to current student eligibility.
+                Government fee waivers and corporate assistance mapped to current student eligibility.
               </p>
             </div>
             <ScholarshipSection profile={profile} />
@@ -350,7 +365,7 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Calculator className="w-6 h-6 text-indigo-400" />
-                Education Loan EMI & Repayment Simulator
+                <span>Education Loan EMI & Repayment Simulator</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Calculate estimated monthly payments and compare bank loan terms using transparent
@@ -367,7 +382,7 @@ export default function Home() {
             <div className="pb-4 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Sparkles className="w-6 h-6 text-emerald-400" />
-                Dedicated AI Explanation & Trade-off Panel
+                <span>Dedicated AI Explanation & Trade-off Panel</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Detailed reasoning behind pathways, observed inputs, bottlenecks, and real-world
@@ -383,8 +398,8 @@ export default function Home() {
         )}
       </main>
 
-      {/* Footer */}
-      <Footer />
+      {/* Redesigned Product Footer */}
+      <Footer setActiveTab={setActiveTab} />
     </div>
   );
 }

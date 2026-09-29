@@ -4,15 +4,15 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "PathPilot AI | Career Path Simulator: From Class 10 to Career",
   description:
-    "AI-Powered Education & Career Decision-Support Platform simulating multi-step pathways, institution comparisons, decision trade-offs, and what-if scenarios for students after Class 10. HACK MATRIX 5.0 (MISC-01).",
+    "AI-Powered Education & Career Decision-Support Platform simulating multi-step pathways, institution comparisons, decision trade-offs, and what-if scenarios for students after Class 10.",
   keywords: [
     "PathPilot AI",
     "Career Path Simulator",
     "Class 10 Career Guidance",
-    "HACK MATRIX 5.0",
-    "PCCOE Pune",
     "Decision Matrix",
     "Education Loan Calculator",
+    "Career Pathways",
+    "College Trade-offs",
   ],
 };
 

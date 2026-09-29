@@ -3,7 +3,7 @@
 import React from "react";
 import { DEMO_SCHOLARSHIPS } from "@/data/demoData";
 import { StudentProfile } from "@/lib/types";
-import { Award, FileText, CheckCircle2, AlertCircle, Info, ExternalLink } from "lucide-react";
+import { Award, FileText, CheckCircle2, Info, ArrowUpRight } from "lucide-react";
 
 interface ScholarshipSectionProps {
   profile: StudentProfile;
@@ -12,18 +12,19 @@ interface ScholarshipSectionProps {
 export default function ScholarshipSection({ profile }: ScholarshipSectionProps) {
   return (
     <div className="space-y-6">
-      {/* Disclaimer Banner */}
+      {/* Information Banner */}
       <div className="glass-panel p-4 rounded-xl border border-indigo-500/20 bg-indigo-950/20 flex items-start gap-3">
         <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
         <div className="text-xs text-slate-300">
           <p className="font-semibold text-white">
-            Decision-Support Scholarship Matching (Synthetic & Official Scheme Frameworks)
+            Eligible Scholarship & Financial Assistance Schemes
           </p>
           <p className="text-slate-400 leading-relaxed mt-0.5">
             Scholarships displayed are mapped based on your profile inputs (academic marks, stream,
-            and location). In India, government schemes (like MahaDBT EBC) require Tahsildar income
-            certificates and CAP allotment. PathPilot AI does not guarantee funding; verification on
-            official portals (mahadbt.maharashtra.gov.in / scholarships.gov.in) is essential.
+            and location). In India, government schemes (such as MahaDBT EBC 50% tuition waiver) require
+            Tahsildar income certificates and CAP centralized allotment. Verification on official
+            portals (mahadbt.maharashtra.gov.in / scholarships.gov.in) is recommended before
+            finalizing decisions.
           </p>
         </div>
       </div>
@@ -31,7 +32,6 @@ export default function ScholarshipSection({ profile }: ScholarshipSectionProps)
       {/* Scholarships Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {DEMO_SCHOLARSHIPS.map((sch) => {
-          // Check match viability
           const meetsAcademic =
             !sch.minAcademicPercentage || profile.class10Percentage >= sch.minAcademicPercentage;
           const meetsIncome =
@@ -40,20 +40,22 @@ export default function ScholarshipSection({ profile }: ScholarshipSectionProps)
           return (
             <div
               key={sch.id}
-              className="glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between shadow-lg"
+              className="glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 hover:border-slate-700/80 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col justify-between shadow-lg group"
             >
               <div>
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:scale-105 transition-transform">
                       <Award className="w-4 h-4" />
                     </span>
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
                         {sch.category}
                       </span>
-                      <h4 className="text-sm font-bold text-white leading-snug">{sch.name}</h4>
+                      <h4 className="text-sm font-bold text-white leading-snug group-hover:text-indigo-200 transition-colors">
+                        {sch.name}
+                      </h4>
                     </div>
                   </div>
                   <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 shrink-0">
@@ -61,7 +63,7 @@ export default function ScholarshipSection({ profile }: ScholarshipSectionProps)
                   </span>
                 </div>
 
-                {/* Approximate Benefit Callout */}
+                {/* Estimated Financial Benefit Callout */}
                 <div className="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-3 mb-4">
                   <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-0.5">
                     Estimated Financial Benefit

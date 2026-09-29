@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AIExplanationResponse } from "@/lib/types";
 import {
   Sparkles,
-  Cpu,
   RefreshCw,
   AlertTriangle,
   CheckCircle2,
@@ -12,6 +11,8 @@ import {
   ArrowRight,
   ShieldCheck,
   FileCheck,
+  BrainCircuit,
+  Sliders,
 } from "lucide-react";
 
 interface AIExplanationPanelProps {
@@ -25,16 +26,44 @@ export default function AIExplanationPanel({
   loading,
   onRefresh,
 }: AIExplanationPanelProps) {
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  const loadingMessages = [
+    "Analyzing student profile and declared academic strengths...",
+    "Evaluating multi-stage progression routes and prerequisites...",
+    "Assessing affordability buffers against benchmark fee models...",
+    "Synthesizing trade-offs, uncertainties, and strategic next steps...",
+  ];
+
+  useEffect(() => {
+    if (!loading) {
+      setLoadingStep(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingStep((prev) => (prev + 1) % loadingMessages.length);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [loading, loadingMessages.length]);
+
   if (loading) {
     return (
-      <div className="glass-panel rounded-2xl p-10 border border-slate-800 flex flex-col items-center justify-center text-center space-y-4">
-        <div className="w-12 h-12 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
-        <div>
-          <h4 className="text-base font-bold text-white">Synthesizing AI Reasoning...</h4>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm">
-            Evaluating academic fit, trade-offs, and risk factors via server-side Gemini 1.5 Flash
-            engine.
+      <div className="glass-panel rounded-2xl p-10 border border-slate-800 flex flex-col items-center justify-center text-center space-y-6 shadow-2xl">
+        <div className="relative">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center animate-pulse">
+            <BrainCircuit className="w-8 h-8 text-indigo-400" />
+          </div>
+          <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-cyan-400 animate-ping" />
+        </div>
+
+        <div className="space-y-2 max-w-md">
+          <h4 className="text-base font-bold text-white">Synthesizing Decision Intelligence</h4>
+          <p className="text-xs text-indigo-300 font-medium h-6 transition-all duration-300">
+            {loadingMessages[loadingStep]}
           </p>
+          <div className="w-48 h-1.5 bg-slate-800 rounded-full mx-auto overflow-hidden mt-3">
+            <div className="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 w-full animate-pulse" />
+          </div>
         </div>
       </div>
     );
@@ -46,9 +75,9 @@ export default function AIExplanationPanel({
         <p className="text-xs text-slate-400 mb-4">No AI explanation generated yet.</p>
         <button
           onClick={onRefresh}
-          className="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white"
+          className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-600 to-cyan-600 text-white hover:brightness-110 transition-all"
         >
-          Generate AI Reasoning
+          Generate Decision Intelligence
         </button>
       </div>
     );
@@ -57,48 +86,32 @@ export default function AIExplanationPanel({
   return (
     <div className="space-y-6">
       {/* Top Status & Trigger Bar */}
-      <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-3">
-          <div
-            className={`p-2.5 rounded-xl border ${
-              explanation.source === "gemini-ai"
-                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                : "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
-            }`}
-          >
-            {explanation.source === "gemini-ai" ? (
-              <Sparkles className="w-5 h-5 animate-pulse" />
-            ) : (
-              <Cpu className="w-5 h-5" />
-            )}
+          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600/20 to-cyan-500/20 border border-indigo-500/30 text-indigo-400">
+            <BrainCircuit className="w-5 h-5 text-indigo-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-bold text-white">AI Decision-Support Insights</h3>
-              <span
-                className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
-                  explanation.source === "gemini-ai"
-                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
-                    : "bg-cyan-500/20 text-cyan-300 border-cyan-500/30"
-                }`}
-              >
-                {explanation.source === "gemini-ai"
-                  ? "Gemini 1.5 Flash Active"
-                  : "Deterministic Local AI Engine"}
+              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border bg-indigo-500/20 text-indigo-300 border-indigo-500/30 flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5 text-cyan-300" />
+                <span>Decision Intelligence Active</span>
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Transparent breakdown separating observed data, deterministic formulas, and AI reasoning.
+              Transparent breakdown separating observed data, deterministic formulas, and strategic AI
+              reasoning.
             </p>
           </div>
         </div>
 
         <button
           onClick={onRefresh}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all shrink-0"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all shrink-0"
         >
           <RefreshCw className="w-3.5 h-3.5 text-indigo-400" />
-          <span>Regenerate Insights</span>
+          <span>Regenerate Analysis</span>
         </button>
       </div>
 
@@ -106,8 +119,8 @@ export default function AIExplanationPanel({
         {/* Left Column: 1. Observed Inputs & 2. Rule-Based Analysis */}
         <div className="lg:col-span-6 space-y-6">
           {/* Section 1: OBSERVED INPUTS */}
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-800">
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl space-y-3">
+            <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
               <FileCheck className="w-4 h-4 text-indigo-400" />
               <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                 1. Observed Student Inputs
@@ -115,7 +128,10 @@ export default function AIExplanationPanel({
             </div>
             <ul className="space-y-1.5 text-xs text-slate-300">
               {explanation.observedInputs.map((inputStr, idx) => (
-                <li key={idx} className="flex items-start gap-2 bg-slate-900/60 p-2 rounded-lg">
+                <li
+                  key={idx}
+                  className="flex items-start gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/70"
+                >
                   <span className="text-indigo-400 font-bold">&bull;</span>
                   <span>{inputStr}</span>
                 </li>
@@ -126,13 +142,13 @@ export default function AIExplanationPanel({
           {/* Section 2: MODEL / RULE-BASED ANALYSIS */}
           <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
-              <Cpu className="w-4 h-4 text-cyan-400" />
+              <BrainCircuit className="w-4 h-4 text-cyan-400" />
               <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                2. Model & Rule-Based Analysis
+                2. Model Analysis & Feasibility Screening
               </h4>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/40 p-3 rounded-xl border border-slate-800">
+            <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/40 p-3.5 rounded-xl border border-slate-800">
               {explanation.ruleBasedAnalysis.summary}
             </p>
 
@@ -173,11 +189,11 @@ export default function AIExplanationPanel({
         {/* Right Column: 3. AI Insights, 4. Scenario Result, 5. Uncertainties, 6. Next Steps */}
         <div className="lg:col-span-6 space-y-6">
           {/* Section 3: AI INSIGHTS & HIDDEN TRADE-OFFS */}
-          <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-slate-900/50 to-purple-950/20 shadow-xl space-y-4">
+          <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-slate-900/60 to-purple-950/20 shadow-xl space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-indigo-500/20">
               <Sparkles className="w-4 h-4 text-indigo-400" />
               <h4 className="text-xs font-bold text-indigo-200 uppercase tracking-wider">
-                3. AI Insights & Hidden Trade-offs
+                3. Strategic Insights & Hidden Realities
               </h4>
             </div>
 
@@ -201,7 +217,7 @@ export default function AIExplanationPanel({
 
             <div>
               <span className="text-xs font-bold text-emerald-300 block mb-1">
-                Strategic AI Recommendation:
+                Strategic Recommendation:
               </span>
               <p className="text-xs text-slate-300 leading-relaxed">
                 {explanation.aiInsights.strategicRecommendation}
@@ -213,9 +229,9 @@ export default function AIExplanationPanel({
           {explanation.scenarioResult && (
             <div className="glass-panel rounded-2xl p-5 sm:p-6 border border-amber-500/30 bg-amber-950/20 shadow-xl space-y-3">
               <div className="flex items-center gap-2 pb-2 border-b border-amber-500/20">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                <Sliders className="w-4 h-4 text-amber-400" />
                 <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider">
-                  4. What-If Scenario Result: {explanation.scenarioResult.scenarioName}
+                  4. Scenario Simulation Result: {explanation.scenarioResult.scenarioName}
                 </h4>
               </div>
               <p className="text-xs text-slate-200 leading-relaxed">

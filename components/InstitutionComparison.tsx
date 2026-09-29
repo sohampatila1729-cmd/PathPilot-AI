@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Institution } from "@/lib/types";
 import { DEMO_INSTITUTIONS } from "@/data/demoData";
-import { Building2, Check, AlertTriangle, ShieldCheck, HelpCircle } from "lucide-react";
+import { Building2, Check, Info, ShieldCheck, ExternalLink } from "lucide-react";
 
 export default function InstitutionComparison() {
   const [selectedIds, setSelectedIds] = useState<string[]>([
@@ -21,7 +21,6 @@ export default function InstitutionComparison() {
       if (selectedIds.length < 3) {
         setSelectedIds([...selectedIds, id]);
       } else {
-        // replace last
         setSelectedIds([selectedIds[0], selectedIds[1], id]);
       }
     }
@@ -33,17 +32,18 @@ export default function InstitutionComparison() {
 
   return (
     <div className="space-y-6">
-      {/* Synthetic Data Notice Banner */}
-      <div className="glass-panel p-4 rounded-xl border border-amber-500/20 bg-amber-950/20 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+      {/* Benchmark Data Notice Banner */}
+      <div className="glass-panel p-4 rounded-xl border border-indigo-500/20 bg-indigo-950/20 flex items-start gap-3">
+        <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
         <div className="text-xs text-slate-300">
-          <span className="font-bold text-amber-300 uppercase tracking-wide">
-            [DEMO / SYNTHETIC DATA NOTICE]
+          <span className="font-bold text-indigo-300 uppercase tracking-wide">
+            [Representative Institution Benchmarks]
           </span>
           <p className="mt-0.5 text-slate-400 leading-relaxed">
-            Institutional tuition fees, entrance cutoffs, and programs below are realistic regional
-            approximations for simulation purposes. Always verify current cutoffs on official
-            admissions portals (e.g. cetcell.mahacet.org and respective university websites).
+            Tuition estimates, entrance cutoffs, and program structures below represent regional
+            benchmark models for decision-support simulation. Always verify real-time cutoffs and fee
+            schedules on official admissions portals (such as cetcell.mahacet.org and respective
+            institutions).
           </p>
         </div>
       </div>
@@ -184,7 +184,7 @@ export default function InstitutionComparison() {
                       {inst.scholarshipAvailability} Availability
                     </span>
                     <p className="text-[10px] text-slate-400 mt-1">
-                      Eligible for MahaDBT EBC 50% state fee concessions & AICTE schemes.
+                      Eligible for state fee concessions (e.g. MahaDBT EBC 50%) & AICTE schemes.
                     </p>
                   </td>
                 ))}

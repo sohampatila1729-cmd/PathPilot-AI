@@ -36,3 +36,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# archives and media
+*.zip
+*.tar.gz
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# temporary inspection assets and slide previews
+slide_previews/
+template_media/
+ppt_details.json
+check_*.py
+inspect_*.py
+parse_colors.py
+verify_assets.py
